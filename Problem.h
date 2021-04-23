@@ -6,20 +6,9 @@
 #include <cmath>
 #include <utility>
 #include "Node.h"
+#include "CompareCost.h"
 
 using namespace std;
-
-struct CompareCost { //https://www.geeksforgeeks.org/stl-priority-queue-for-structure-or-class/
-        bool operator() (Node* p1, Node* p2) {
-            return p1 -> cost > p2->cost;
-        }
-};
-
-// struct CompareCostMisplaced { //https://www.geeksforgeeks.org/stl-priority-queue-for-structure-or-class/
-//         bool operator() (Node* p1, Node* p2) {
-//             return p1 -> cost > p2->cost;
-//         }
-// };
 
 class Problem {
     private:
@@ -126,7 +115,6 @@ class Problem {
         // int AstarEuclideanSearch();
 
     public:
-
         Node* up(Node* currState) { //operator 1
             if (currState -> blank_row == 0) {
                 return nullptr;
@@ -203,38 +191,34 @@ class Problem {
             return true;
         }
 
-        friend int MisplacedTileHeuristic(Node* curr, Node* goal){
-            int counter = 0;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (curr -> matrix.at(i).at(j) != goal -> matrix.at(i).at(j)) {
-                        counter++;
-                    }
-                }
-            }
-            return counter;
-        }
+        // friend int MisplacedTileHeuristic(Node* curr, Node* goal){
+        //     int counter = 0;
+        //     for (int i = 0; i < 3; i++) {
+        //         for (int j = 0; j < 3; j++) {
+        //             if (curr -> matrix.at(i).at(j) != goal -> matrix.at(i).at(j)) {
+        //                 counter++;
+        //             }
+        //         }
+        //     }
+        //     return counter;
+        // }
 
-        friend int ManhattanDistanceHeuristic(Node* curr, Node* goal) {
-            vector<pair<int, int>> sol = {make_pair(2, 2), make_pair(0, 0), make_pair(0, 1), make_pair(0, 2), 
-                                          make_pair(1, 0), make_pair(1, 1), make_pair(1, 2), make_pair(2, 0), make_pair(2, 1)};
-            int counter = 0;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (curr -> matrix.at(i).at(j) != goal -> matrix.at(i).at(j)) {
-                        if (curr -> matrix.at(i).at(j) != 0) {
-                            counter += std::abs(i - sol.at(curr -> matrix.at(i).at(j)).first) + std::abs(j - sol.at(curr -> matrix.at(i).at(j)).second);
-                        }
-                    }
-                }
-            }
-            return counter;
-        }
+        // friend int ManhattanDistanceHeuristic(Node* curr, Node* goal) {
+        //     vector<pair<int, int>> sol = {make_pair(2, 2), make_pair(0, 0), make_pair(0, 1), make_pair(0, 2), 
+        //                                   make_pair(1, 0), make_pair(1, 1), make_pair(1, 2), make_pair(2, 0), make_pair(2, 1)};
+        //     int counter = 0;
+        //     for (int i = 0; i < 3; i++) {
+        //         for (int j = 0; j < 3; j++) {
+        //             if (curr -> matrix.at(i).at(j) != goal -> matrix.at(i).at(j)) {
+        //                 if (curr -> matrix.at(i).at(j) != 0) {
+        //                     counter += std::abs(i - sol.at(curr -> matrix.at(i).at(j)).first) + std::abs(j - sol.at(curr -> matrix.at(i).at(j)).second);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return counter;
+        // }
 
 };
-
-// {1 2 3}
-// {4 * 6}
-// {7 8 5}
 
 #endif

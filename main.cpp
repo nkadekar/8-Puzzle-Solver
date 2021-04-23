@@ -1,17 +1,13 @@
 #include <iostream>
-#include "Node.h"
-#include "Problem.h"
 #include <vector>
 #include <tuple>
 #include <utility>
 
+#include "Node.h"
+#include "Problem.h"
+#include "Heuristic.h"
+
 using namespace std;
-
-// Node uniformSearch(Problem* problem) {
-
-
-
-// }
 
 int main() {
 
@@ -28,7 +24,7 @@ int main() {
     Node* doableState = new Node(doable, 0);
     Node* ohBoyState = new Node(ohboy, 0);
 
-    Problem* puzzle = new Problem(ohBoyState, goalState);
+    Problem* puzzle = new Problem(doableState, goalState);
 
     // cout << "Initial State" << endl;
     // initState -> Print();
@@ -53,7 +49,8 @@ int main() {
 
     vector<vector<int>> test = {{3,2,8}, {4,5,6}, {7,1,0}};
     Node* testState = new Node(test, 0);
-    cout << puzzle -> ManhattanDistanceHeuristic(testState, goalState) << endl;
+    Heuristic* heuristic = new MisplacedTileHeuristic();
+    cout << heuristic->runHeuristic(testState, goalState) << endl;
 
     return 0;
 }
