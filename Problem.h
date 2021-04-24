@@ -21,20 +21,28 @@ class Problem {
                 this->goalState = goalstate;
         }
 
-        int UniformCostSearch(){
+        int UniformCostSearch(int &nodesExpanded, int &maxQueueSize){
             priority_queue<Node*, vector<Node*>, CompareCost> frontier;
             vector<Node*> visited;
-            bool goalFound = false;
+            // bool goalFound = false;
             frontier.push(initialState);
             while(!frontier.empty()) {
+                if (frontier.size() > maxQueueSize) {
+                    maxQueueSize = frontier.size();
+                }
+                
                 //check if top node visited or goal
                 Node* curr = frontier.top();
                 frontier.pop();
 
+                curr -> Print();
+
                 if(checkGoal(curr, this -> goalState)) {
-                    goalFound = true;
+                    // goalFound = true;
                     return curr -> cost;
                 }
+
+                nodesExpanded++;
                 
                 if(!checkVisited(curr, visited)) {
                     visited.push_back(curr);
@@ -65,54 +73,108 @@ class Problem {
             return -1;
         }
 
-        // //A* misplaced tiles
-        // int AStarMissingTileSearch(){
-        //     priority_queue<Node*, vector<Node*>, CompareCost> frontier;
-        //     vector<Node*> visited;
-        //     bool goalFound = false;
-        //     initialState->cost = MisplacedTileHeuristic()
-        //     frontier.push(initialState);
-        //     while(!frontier.empty()) {
-        //         //check if top node visited or goal
-        //         Node* curr = frontier.top();
-        //         frontier.pop();
+        //A* misplaced tiles
+        int AStarMissingTileSearch(int &nodesExpanded, int &maxQueueSize){
+            priority_queue<Node*, vector<Node*>, MisplacedTileCompareCost> frontier;
+            vector<Node*> visited;
+            // bool goalFound = false;
+            frontier.push(initialState);
+            while(!frontier.empty()) {
+                if (frontier.size() > maxQueueSize) {
+                    maxQueueSize = frontier.size();
+                }
+                //check if top node visited or goal
+                Node* curr = frontier.top();
+                frontier.pop();
 
-        //         if(checkGoal(curr, this -> goalState)) {
-        //             goalFound = true;
-        //             return curr -> cost;
-        //         }
+                curr -> Print();
+
+                if(checkGoal(curr, this -> goalState)) {
+                    // goalFound = true;
+                    return curr -> cost;
+                }
+
+                nodesExpanded++;
                 
-        //         if(!checkVisited(curr, visited)) {
-        //             visited.push_back(curr);
+                if(!checkVisited(curr, visited)) {
+                    visited.push_back(curr);
 
-        //             //if not goal or visited: Run operators and add to frontier if not nullptr and not visited
-        //             if (up(curr) != nullptr) {
-        //                 if (!checkVisited(up(curr), visited)){
-        //                     Node* temp = new Node(up(curr), up(curr) -> cost + MisplacedTileHeuristic(up(curr), goalState))
-        //                     frontier.push(up(curr));
-        //                 }
-        //             }
-        //             if (left(curr) != nullptr) {
-        //                 if (!checkVisited(left(curr), visited)){
-        //                     frontier.push(left(curr));
-        //                 }
-        //             }
-        //             if (down(curr) != nullptr) {
-        //                 if (!checkVisited(down(curr), visited)){
-        //                     frontier.push(down(curr));
-        //                 }
-        //             }
-        //             if (right(curr) != nullptr) {
-        //                 if (!checkVisited(right(curr), visited)){
-        //                     frontier.push(right(curr));
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     return -1;
-        // }
+                    //if not goal or visited: Run operators and add to frontier if not nullptr and not visited
+                    if (up(curr) != nullptr) {
+                        if (!checkVisited(up(curr), visited)){
+                            frontier.push(up(curr));
+                        }
+                    }
+                    if (left(curr) != nullptr) {
+                        if (!checkVisited(left(curr), visited)){
+                            frontier.push(left(curr));
+                        }
+                    }
+                    if (down(curr) != nullptr) {
+                        if (!checkVisited(down(curr), visited)){
+                            frontier.push(down(curr));
+                        }
+                    }
+                    if (right(curr) != nullptr) {
+                        if (!checkVisited(right(curr), visited)){
+                            frontier.push(right(curr));
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
 
-        // int AstarEuclideanSearch();
+        int AstarEuclideanSearch(int &nodesExpanded, int &maxQueueSize) {
+            priority_queue<Node*, vector<Node*>, EuclideanCompareCost> frontier;
+            vector<Node*> visited;
+            // bool goalFound = false;
+            frontier.push(initialState);
+            while(!frontier.empty()) {
+                if (frontier.size() > maxQueueSize) {
+                    maxQueueSize = frontier.size();
+                }
+                //check if top node visited or goal
+                Node* curr = frontier.top();
+                frontier.pop();
+
+                curr -> Print();
+
+                if(checkGoal(curr, this -> goalState)) {
+                    // goalFound = true;
+                    return curr -> cost;
+                }
+
+                nodesExpanded++;
+                
+                if(!checkVisited(curr, visited)) {
+                    visited.push_back(curr);
+
+                    //if not goal or visited: Run operators and add to frontier if not nullptr and not visited
+                    if (up(curr) != nullptr) {
+                        if (!checkVisited(up(curr), visited)){
+                            frontier.push(up(curr));
+                        }
+                    }
+                    if (left(curr) != nullptr) {
+                        if (!checkVisited(left(curr), visited)){
+                            frontier.push(left(curr));
+                        }
+                    }
+                    if (down(curr) != nullptr) {
+                        if (!checkVisited(down(curr), visited)){
+                            frontier.push(down(curr));
+                        }
+                    }
+                    if (right(curr) != nullptr) {
+                        if (!checkVisited(right(curr), visited)){
+                            frontier.push(right(curr));
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
 
     public:
         Node* up(Node* currState) { //operator 1
@@ -190,35 +252,6 @@ class Problem {
             }
             return true;
         }
-
-        // friend int MisplacedTileHeuristic(Node* curr, Node* goal){
-        //     int counter = 0;
-        //     for (int i = 0; i < 3; i++) {
-        //         for (int j = 0; j < 3; j++) {
-        //             if (curr -> matrix.at(i).at(j) != goal -> matrix.at(i).at(j)) {
-        //                 counter++;
-        //             }
-        //         }
-        //     }
-        //     return counter;
-        // }
-
-        // friend int ManhattanDistanceHeuristic(Node* curr, Node* goal) {
-        //     vector<pair<int, int>> sol = {make_pair(2, 2), make_pair(0, 0), make_pair(0, 1), make_pair(0, 2), 
-        //                                   make_pair(1, 0), make_pair(1, 1), make_pair(1, 2), make_pair(2, 0), make_pair(2, 1)};
-        //     int counter = 0;
-        //     for (int i = 0; i < 3; i++) {
-        //         for (int j = 0; j < 3; j++) {
-        //             if (curr -> matrix.at(i).at(j) != goal -> matrix.at(i).at(j)) {
-        //                 if (curr -> matrix.at(i).at(j) != 0) {
-        //                     counter += std::abs(i - sol.at(curr -> matrix.at(i).at(j)).first) + std::abs(j - sol.at(curr -> matrix.at(i).at(j)).second);
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     return counter;
-        // }
-
 };
 
 #endif
