@@ -13,12 +13,12 @@ class Node{
     int blank_column = 0; //stores column of the blank spot
     int blank_row = 0; //stores row of the blank spot
     int cost = 0; //cost of node (including path to the node)
-    // Node* parent;
+    Node* parent; //used for printing solution path
     
-    Node(vector<vector<int>> Matrix, int cost) {
+    Node(vector<vector<int>> Matrix, int cost, Node* parent) {
         this->matrix = Matrix;
         this->cost = cost;
-        for (int i = 0; i < Matrix.size(); i++) {
+        for (int i = 0; i < Matrix.size(); i++) { //finds the empty space
             for (int j = 0; j < Matrix.at(i).size(); j++) {
                 if(Matrix.at(i).at(j) == 0) {
                     blank_row = i;
@@ -26,6 +26,7 @@ class Node{
                 }
             }
         }
+        this->parent = parent;
     }
     
     void Swap(int r1, int c1, int r2, int c2) { //swaps 2 positions in the matrix. Used for the Problem class operators
@@ -34,7 +35,7 @@ class Node{
         matrix.at(r1).at(c1) = temp;
     }
 
-    void Print() { //prints board
+    void Print() { //prints node (board)
         for (int i = 0; i < matrix.size(); i++) {
             cout << "{";
             for (int j = 0; j < matrix.at(i).size(); j++) {
@@ -47,7 +48,6 @@ class Node{
             cout << endl;
         
         }
-
         cout << endl;
     }
 };
