@@ -11,10 +11,10 @@
 using namespace std;
 
 int main() {
-    vector<vector<int>> goal = {{1,2,3}, {4,5,6}, {7,8,0}};
-    vector<vector<int>> default_puzzle = {{8,7,1}, {6,0,2}, {5,4,3}};
-    vector<vector<int>> custom_initial_vec;
-    Node* goalState = new Node(goal, 0);
+    vector<vector<int>> goal = {{1,2,3}, {4,5,6}, {7,8,0}}; //goal vector
+    vector<vector<int>> default_puzzle = {{1,0,3}, {4,2,6}, {7,5,8}}; //default puzzle assigned
+    vector<vector<int>> custom_initial_vec; //vector for userinput
+    Node* goalState = new Node(goal, 0, nullptr); //
     bool isCustom = false;
     
     cout << "Welcome to 862142793 & 862146661 8 puzzle solver." << endl << "Type \"1\" to use a default puzzle, or \"2\" to enter your own puzzle." << endl;
@@ -23,15 +23,14 @@ int main() {
 
     cin >> userInput;
 
-    while (userInput != 1 && userInput != 2) {
+    while (userInput != 1 && userInput != 2) { //avoids invalid input
         cout << "Please re-enter a valid answer\n";
         cin >> userInput;
     }
 
-    if (userInput == 1) {
+    //isCustom is automatically set to false so if the user enters 1, the default puzzle will be automatically set
 
-    }
-    if (userInput == 2) {
+    if (userInput == 2) { //grabs 3 sets of 3 numbers that are pushed into a vector of vectors to end up with a matrix of 3 by 3
         cout << "Enter your puzzle, use a zero to represent the blank\nEnter the first row, use space or tabs between numbers\n";
         stringstream ssin;
         int lineInteger;
@@ -72,10 +71,10 @@ int main() {
     
     Node* initialState = nullptr;
     if (isCustom) {
-        initialState = new Node(custom_initial_vec, 0);
+        initialState = new Node(custom_initial_vec, 0, nullptr); //use custom puzzle if '2' is inputed
     }
     else {
-        initialState = new Node(default_puzzle, 0);
+        initialState = new Node(default_puzzle, 0, nullptr); //use default if '1' is inputed
     }
     cout << "Select algorithm. (1) for Uniform Cost Search, (2) for the Misplaced Tile Heuristic, or (3) the Eucledian Distance Heuristic.\n";
     cin.clear(); //clear cin buffer
@@ -89,12 +88,10 @@ int main() {
 
     Problem* puzzle = new Problem(initialState, goalState);
 
-    // initialState -> Print();
+    int maxQueueSize = 0; 
+    int nodesExpanded = 0; 
 
-    int maxQueueSize = 0;
-    int nodesExpanded = 0;
-
-    if (algoChoice == 1){
+    if (algoChoice == 1){ //(1) for Uniform Cost Search, (2) for the Misplaced Tile Heuristic, or (3) the Eucledian Distance Heuristic
         puzzle -> UniformCostSearch(nodesExpanded, maxQueueSize);
     }
     else if (algoChoice == 2){
